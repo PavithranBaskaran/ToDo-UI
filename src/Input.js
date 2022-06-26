@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import '../src/script'
+
 
 function Input() {
-  const localUser = JSON.parse(localStorage.getItem('myList')) || {};
+  const localUser = JSON.parse(localStorage.getItem('myList')) ;
   const [currentTask, setcurrentTask] = useState("");
   const [list, setList] = useState(localUser);
   let addTask = () => {
@@ -17,10 +17,10 @@ function Input() {
   let markDone = (id) => {
     let itemIndex = list.findIndex((obj) => obj.id === id);
 
-    if (list[itemIndex].isDone == true) {
+    if (list[itemIndex].isDone === true) {
       list[itemIndex].isDone = false;
       setList([...list]);
-    } else if (list[itemIndex].isDone == false) {
+    } else if (list[itemIndex].isDone === false) {
       list[itemIndex].isDone = true;
       setList([...list]);
     }
