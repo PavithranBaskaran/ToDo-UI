@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import '../src/script'
 
 function Input() {
+  const localUser = JSON.parse(localStorage.getItem('myList')) || {};
   const [currentTask, setcurrentTask] = useState("");
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(localUser);
   let addTask = () => {
     setList([
       ...list,
@@ -31,15 +32,8 @@ function Input() {
     setList([...list])
   }
   useEffect(() => {
-    localStorage.setItem('items', JSON.stringify(list));
+    localStorage.setItem('myList',JSON.stringify(list))
   }, [list]);
-
-    React.useEffect(() => {
-        const list = JSON.parse(localStorage.getItem('items'));
-        if (list) {
-         setList([...list]);
-        }
-      }, []);
   
   
   return (
