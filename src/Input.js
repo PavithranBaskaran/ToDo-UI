@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-
 function Input() {
-  const localUser = JSON.parse(localStorage.getItem('myList')) ;
-  const [currentTask, setcurrentTask] = useState("");
+  var localUser = JSON.parse(localStorage.getItem("myList"));
+  if(!localUser){
+    localStorage.setItem("myList", '[]')
+  }
+ 
+  const [currentTask, setcurrentTask] = useState([]);
   const [list, setList] = useState(localUser);
   let addTask = () => {
     setList([
@@ -11,6 +14,12 @@ function Input() {
       { id: list.length + 1, name: currentTask, isDone: false },
     ]);
   };
+
+  useEffect(() => {
+    localStorage.setItem("myList", JSON.stringify(list));
+    console.log('useEffect working')
+  }, [list]);
+  
   let clear = () => {
     document.getElementById("id").value = "";
   };
@@ -28,20 +37,16 @@ function Input() {
 
   let deleteList = (id) => {
     let itemIndex = list.findIndex((obj) => obj.id === id);
-    list.splice(itemIndex,1);
-    setList([...list])
-  }
-  useEffect(() => {
-    localStorage.setItem('myList',JSON.stringify(list))
-  }, [list]);
-  
-  
+    list.splice(itemIndex, 1);
+    setList([...list]);
+  };
+
   return (
     <>
-      <ul class="list-group mb-4" >
+      <ul class="list-group mb-4">
         <div class="input-group mb-3">
           <input
-          id="id"
+            id="id"
             type="text"
             class="form-control"
             placeholder="Enter your activity"
@@ -60,11 +65,15 @@ function Input() {
           </button>
         </div>
       </ul>
-      <div className="container overflow-auto" >
+      <div className="container overflow-auto">
         <ul class="list-group ">
           {list.map((item) => {
             return (
-              <li className={`items list-group-item ${item.isDone ? "text-decoration-line-through text-muted" : ""}`}  >
+              <li
+                className={`items list-group-item ${
+                  item.isDone ? "text-decoration-line-through text-muted" : ""
+                }`}
+              >
                 <input
                   class="form-check-input me-1"
                   type="checkbox"
@@ -72,7 +81,10 @@ function Input() {
                   aria-label="..."
                   onClick={() => markDone(item.id)}
                 />
-                {item.name} <a onClick={() =>deleteList(item.id)} class="cross">❌</a>
+                {item.name}{" "}
+                <p onClick={() => deleteList(item.id)} class="cross">
+                  ❌
+                </p>
               </li>
             );
           })}
